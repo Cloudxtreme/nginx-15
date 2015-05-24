@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+
+name=$(basename "$0")
+op="$1"
+image="nginx-r"
+
+if [[ -z $op ]]; then
+    echo You need at least one parameter to tell proxy container what to do.
+fi
+
+case "$op" in
+    run) docker run --name $name \
+                    --link node1:node1 \
+                    --link node2:node2 \
+                    -p 80:80 \
+                    -d "$image"
+    ;;
+    start) docker start $name
+    ;;
+    stop) docker stop $name 
+    ;;
+    restart) docker stop $name
+             sleep 1
+             docker start $name
+    ;;
+    status) docker ps -a | head -n 1
+            docker ps -a | grep $name
+    ;;
+    exec) docker exec -it $name /bin/bash
+    ;;
+esac
