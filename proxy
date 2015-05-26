@@ -11,8 +11,10 @@ fi
 
 case "$op" in
     run) docker run --name $name \
+                    --privileged=true \
                     --link node1:node1 \
                     --link node2:node2 \
+                    --link owncloud:owncloud \
                     -p 80:80 \
                     -d "$image"
     ;;
